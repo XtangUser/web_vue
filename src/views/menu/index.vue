@@ -14,7 +14,7 @@
             <el-icon><House /></el-icon>
             <span>首页</span>
           </el-menu-item>
-          <el-menu-item index="2">
+          <el-menu-item index="overview">
             <el-icon><document /></el-icon>
             <span>系统概览</span>
           </el-menu-item>
@@ -25,12 +25,12 @@
               <span>用户管理</span>
             </template>
             <el-menu-item-group title="管理员管理">
-              <el-menu-item index="3-1">产品管理员</el-menu-item>
-              <el-menu-item index="3-2">用户管理员</el-menu-item>
-              <el-menu-item index="3-3">消息管理员</el-menu-item>
+              <el-menu-item index="product_manage">产品管理员</el-menu-item>
+              <el-menu-item index="users_manage">用户管理员</el-menu-item>
+              <el-menu-item index="message_manage">消息管理员</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="员工管理">
-              <el-menu-item index="3-3">用户列表</el-menu-item>
+              <el-menu-item index="user_list">用户列表</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
           <!-- 产品管理 -->
@@ -40,10 +40,10 @@
               <span>产品管理</span>
             </template>
             <el-menu-item-group title="入库管理">
-              <el-menu-item index="4-1">产品列表</el-menu-item>
+              <el-menu-item index="product_list">产品列表</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="出库管理">
-              <el-menu-item index="4-3">出库列表</el-menu-item>
+              <el-menu-item index="out_productList">出库列表</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
           <!-- 消息管理 -->
@@ -53,29 +53,29 @@
               <span>消息管理</span>
             </template>
             <el-menu-item-group title="消息管理">
-              <el-menu-item index="5-1">消息列表</el-menu-item>
+              <el-menu-item index="message_list">消息列表</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="回收站">
-              <el-menu-item index="5-3">回收站</el-menu-item>
+              <el-menu-item index="recycle_list">回收站</el-menu-item>
             </el-menu-item-group>
           </el-sub-menu>
           <!-- 合同管理 -->
-          <el-menu-item index="6">
+          <el-menu-item index="files">
             <el-icon><MessageBox /></el-icon>
             <span>合同管理</span>
           </el-menu-item>
           <!-- 操作日志 -->
-          <el-menu-item index="7">
+          <el-menu-item index="operation_log">
             <el-icon><MessageBox /></el-icon>
             <span>操作日志</span>
           </el-menu-item>
           <!-- 登录日志 -->
-          <el-menu-item index="8">
+          <el-menu-item index="login_log">
             <el-icon><MessageBox /></el-icon>
             <span>登录日志</span>
           </el-menu-item>
           <!-- 系统设置 -->
-          <el-menu-item index="9">
+          <el-menu-item index="set">
             <el-icon><Tools /></el-icon>
             <span>系统设置</span>
           </el-menu-item>
@@ -83,12 +83,17 @@
       </el-aside>
       <el-container>
         <el-header>
-          <span class="header-left-content">尊敬的 小唐 欢迎您登录本系统</span>
+          <span class="header-left-content">尊敬的 {{ infoStore.name }} 欢迎您登录本系统</span>
           <div class="header-right-content">
             <!-- 信箱 -->
-            <el-icon><Message /></el-icon>
+  <el-badge :is-dot='msgStore.read_list.length> 0' class="item"
+							@click="openDepartment_Message">
+							<el-icon :size="20" class="message">
+								<Message />
+							</el-icon>
+						</el-badge>
             <!-- 头像 -->
-            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+            <el-avatar :src="infoStore.imageUrl" />
             <!-- 下拉菜单 -->
             <el-dropdown>
               <span class="el-dropdown-link">
@@ -113,23 +118,37 @@
       </el-container>
     </el-container>
   </div>
+  <departmentMsg ref="department_Msg"></departmentMsg>
 </template>
 
 <script setup lang="ts">
 // 导入图标
-import { Document } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { Document } from '@element-plus/icons-vue' 
+ import departmentMsg from '@/components/department_msg.vue'
+// 导入状态库
+import { useUserinfo } from '@/stores/userinfo'
+const infoStore = useUserinfo()
+import {
+		useMsg
+	} from '@/stores/message'
+	const msgStore = useMsg()
 // 导入路由模块
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 // 创建实例
 const router=useRouter()
 // 禁用屏幕滚动条
 document.body.style.overflow = 'hidden'
 // 退出登录函数
 const goLogin=()=>{
-      // 跳转路由(登陆页面)
-      router.push('/login')
+    // 跳转路由(登陆页面)
+    router.push('/login')
+    localStorage.clear()
 }
+const department_Msg = ref()
+	const openDepartment_Message = () => {
+    department_Msg.value.open()
+	}
 </script>
 
 <style lang="scss" scoped>
@@ -200,5 +219,12 @@ const goLogin=()=>{
     font-size: 13px;
     
     }
+}
+.el-main{
+  background-color: #f3f4fa;
+}
+.item{
+  margin-top: 10px;
+  margin-right: 10px;
 }
 </style>

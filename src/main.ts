@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-
+import  pinia  from '@/stores/index'
+// 导入svg图标
+import 'virtual:svg-icons-register'
 import App from './App.vue'
 // 导入路由
 import router from './router'
@@ -19,6 +20,6 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 app.use(ElementPlus, {
   locale: zhCn,
 })
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 app.mount('#app')

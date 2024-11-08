@@ -14,12 +14,17 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^1.7.3",
     "echarts": "^5.5.1",
     "element-plus": "^2.8.0",
+    "fast-glob": "^3.3.2",
     "mitt": "^3.0.1",
     "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "sass": "^1.77.8",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

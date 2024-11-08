@@ -100,6 +100,11 @@ import { useRouter } from 'vue-router'
 import { login, register } from '@/api/login'
 // 导入其他组件方法
 import forget from './components/forget_password.vue'
+// 导入pinia
+import { useUserinfo } from '@/stores/userinfo'
+import { loginLog } from '@/api/login_log/login_log'
+// 创建实例
+const userStore=useUserinfo ()
 // 创建路由实例
 const router=useRouter()
 // 定义登录与注册切换变量
@@ -181,12 +186,18 @@ const Login = async() => {
   // 拿到token保存本地
   const {token}=res.data
   localStorage.setItem('token',token)
+  console.log(res.data.results);
+  
+  // 获取到的登陆用户数据
+  userStore.userInfo(res.data.results.id)
   // 进行数据的判断
   if (res.data.status == 0) {
     ElMessage({
       message: '登录成功',
       type: 'success'
     })
+    // 埋点登录日志
+    await loginLog(res.data.results)
     // 置空表单
     loginData = resetForm
     // 跳转路由(去首页)
